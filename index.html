@@ -1,19 +1,856 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>DevOps Fundamentals Project</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DevOps Fundamentals Project</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #07090d;
+    color: #f5f7fa;
+}
+
+/* ===== SIDEBAR ===== */
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 230px;
+    background: #05070a;
+    border-right: 1px solid #202631;
+    padding: 25px 15px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 10px 30px;
+    font-weight: bold;
+}
+
+.logo-box {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: linear-gradient(135deg,#5b8cff,#8b72ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.logo small {
+    display: block;
+    color: #7f8999;
+    font-size: 9px;
+    margin-top: 3px;
+}
+
+.section-title {
+    color: #596273;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 15px 12px 8px;
+}
+
+.nav a {
+    display: block;
+    text-decoration: none;
+    color: #8d97a8;
+    padding: 12px;
+    border-radius: 9px;
+    margin: 3px 0;
+    font-size: 13px;
+}
+
+.nav a:hover,
+.nav a.active {
+    background: #151a22;
+    color: white;
+}
+
+.nav a.active {
+    border-left: 2px solid #5b8cff;
+}
+
+.server-status {
+    position: absolute;
+    bottom: 20px;
+    left: 15px;
+    right: 15px;
+    padding: 13px;
+    border: 1px solid #202631;
+    border-radius: 10px;
+    color: #8b95a5;
+    font-size: 11px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background: #29d391;
+    border-radius: 50%;
+    margin-right: 7px;
+}
+
+/* ===== MAIN ===== */
+
+.main {
+    margin-left: 230px;
+    padding: 30px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.breadcrumb {
+    color: #687283;
+    font-size: 11px;
+    margin-bottom: 6px;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+.search {
+    background: #0c1016;
+    border: 1px solid #252c37;
+    border-radius: 9px;
+    padding: 11px 15px;
+    color: white;
+    width: 220px;
+}
+
+.online {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 10px 13px;
+    border-radius: 8px;
+    background: #0d1b16;
+    border: 1px solid #214e3d;
+    color: #29d391;
+    font-size: 11px;
+}
+
+/* ===== CARDS ===== */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 15px;
+}
+
+.card {
+    background: linear-gradient(145deg,#11161f,#0a0d12);
+    border: 1px solid #202733;
+    border-radius: 13px;
+    padding: 20px;
+}
+
+.card:hover {
+    border-color: #354052;
+    transition: .2s;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    color: #7f8999;
+    font-size: 11px;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #252c37;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.value {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 17px 0 5px;
+}
+
+.sub {
+    color: #687283;
+    font-size: 10px;
+}
+
+.green {
+    color: #29d391;
+}
+
+.blue {
+    color: #5b8cff;
+}
+
+.purple {
+    color: #8b72ff;
+}
+
+.orange {
+    color: #ffad5c;
+}
+
+/* ===== PROGRESS ===== */
+
+.progress {
+    height: 6px;
+    background: #252b34;
+    border-radius: 10px;
+    margin-top: 16px;
+    overflow: hidden;
+}
+
+.progress span {
+    display: block;
+    width: 32%;
+    height: 100%;
+    background: linear-gradient(90deg,#5b8cff,#42d9ff);
+}
+
+/* ===== WIDE CARD ===== */
+
+.wide {
+    grid-column: span 2;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+/* ===== GRAPH ===== */
+
+.graph {
+    height: 150px;
+    margin-top: 15px;
+    background:
+        linear-gradient(#171d26 1px,transparent 1px),
+        linear-gradient(90deg,#171d26 1px,transparent 1px);
+    background-size: 45px 36px;
+    border-radius: 8px;
+}
+
+.graph svg {
+    width: 100%;
+    height: 145px;
+}
+
+/* ===== HEALTH ===== */
+
+.check {
+    margin-top: 18px;
+    font-size: 11px;
+    color: #7d8797;
+}
+
+.check span {
+    float: right;
+}
+
+/* ===== PIPELINE ===== */
+
+.pipeline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.stage {
+    flex: 1;
+    text-align: center;
+    padding: 15px 8px;
+    background: #0b1016;
+    border: 1px solid #202733;
+    border-radius: 10px;
+}
+
+.stage strong {
+    display: block;
+    margin-top: 7px;
+    font-size: 12px;
+}
+
+.stage small {
+    color: #697384;
+    font-size: 9px;
+}
+
+.arrow {
+    color: #596273;
+}
+
+/* ===== INFORMATION ===== */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.info {
+    background: #0b1016;
+    border: 1px solid #202733;
+    padding: 13px;
+    border-radius: 9px;
+}
+
+.info small {
+    color: #687283;
+    font-size: 9px;
+}
+
+.info strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+}
+
+/* ===== TECHNOLOGIES ===== */
+
+.tech {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.tech-box {
+    background: #0b1016;
+    border: 1px solid #202733;
+    border-radius: 9px;
+    padding: 14px;
+    text-align: center;
+}
+
+.tech-box strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.tech-box small {
+    color: #687283;
+    font-size: 9px;
+}
+
+/* ===== FOOTER ===== */
+
+.footer {
+    text-align: center;
+    color: #555f6e;
+    font-size: 10px;
+    margin-top: 30px;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media(max-width:900px) {
+
+    .sidebar {
+        width: 70px;
+    }
+
+    .sidebar .logo div:last-child,
+    .section-title,
+    .server-status {
+        display: none;
+    }
+
+    .main {
+        margin-left: 70px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .wide {
+        grid-column: span 2;
+    }
+}
+
+@media(max-width:600px) {
+
+    .sidebar {
+        display: none;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 18px;
+    }
+
+    .topbar {
+        display: block;
+    }
+
+    .search {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .online {
+        margin: 10px 0 0;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wide,
+    .full {
+        grid-column: span 1;
+    }
+
+    .pipeline {
+        flex-direction: column;
+    }
+
+    .stage {
+        width: 100%;
+    }
+
+    .arrow {
+        transform: rotate(90deg);
+    }
+}
+</style>
 </head>
-<body style="font-family: Arial; text-align:center; margin-top:60px;">
 
-<h1>This Is My First DevOps Project</h1>
+<body>
 
-<h2>Student Name: Rohit Surve</h2>
+<!-- SIDEBAR -->
 
-<h3>Batch Code: June26-A529/Devops With Aws</h3>
+<div class="sidebar">
 
-<p>Date: 03 August 2026</p>
+    <div class="logo">
+        <div class="logo-box">D</div>
 
-<h2 style="color:green;">Hosted on AWS Ubuntu Server</h2>
+        <div>
+            DEVOPS
+            <small>FUNDAMENTALS PROJECT</small>
+        </div>
+    </div>
+
+    <div class="section-title">WORKSPACE</div>
+
+    <div class="nav">
+        <a href="#overview" class="active">◈ &nbsp; Overview</a>
+        <a href="#aws">☁ &nbsp; AWS Infrastructure</a>
+        <a href="#deployment">↗ &nbsp; Deployment</a>
+        <a href="#monitoring">⌁ &nbsp; Monitoring</a>
+    </div>
+
+    <div class="section-title">PROJECT</div>
+
+    <div class="nav">
+        <a href="#technologies">⚙ &nbsp; Technologies</a>
+        <a href="#workflow">◇ &nbsp; Workflow</a>
+    </div>
+
+    <div class="server-status">
+        <span class="status-dot"></span>
+        EC2 SERVER ONLINE
+    </div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<header class="topbar">
+
+    <div>
+        <div class="breadcrumb">
+            DevOps Project › Overview
+        </div>
+
+        <h1>System Status</h1>
+    </div>
+
+    <div>
+        <input class="search" placeholder="⌕  Search project...">
+
+        <span class="online">
+            ● All systems operational
+        </span>
+    </div>
+
+</header>
+
+
+<div class="grid" id="overview">
+
+<!-- EC2 -->
+
+<div class="card">
+
+    <div class="card-header">
+        <span>EC2 SERVER</span>
+        <span class="icon">☁</span>
+    </div>
+
+    <div class="value green">
+        ONLINE
+    </div>
+
+    <div class="sub">
+        Ubuntu Linux • AWS EC2
+    </div>
+
+</div>
+
+
+<!-- APACHE -->
+
+<div class="card">
+
+    <div class="card-header">
+        <span>APACHE WEB SERVER</span>
+        <span class="icon">⌁</span>
+    </div>
+
+    <div class="value blue">
+        ACTIVE
+    </div>
+
+    <div class="sub">
+        Static website service
+    </div>
+
+</div>
+
+
+<!-- DISK -->
+
+<div class="card">
+
+    <div class="card-header">
+        <span>DISK USAGE</span>
+        <span class="icon">▣</span>
+    </div>
+
+    <div class="value">
+        31.9%
+    </div>
+
+    <div class="sub">
+        Root filesystem usage
+    </div>
+
+    <div class="progress">
+        <span></span>
+    </div>
+
+</div>
+
+
+<!-- MONITORING -->
+
+<div class="card wide" id="monitoring">
+
+    <div class="card-header">
+        <span>MONITORING OVERVIEW</span>
+
+        <span class="green">
+            LIVE
+        </span>
+    </div>
+
+    <div class="graph">
+
+        <svg viewBox="0 0 600 140"
+             preserveAspectRatio="none">
+
+            <path
+            d="M0 112
+               C55 92 85 118 135 91
+               S220 38 275 73
+               S360 100 405 58
+               S470 42 515 68
+               S560 81 600 49"
+            fill="none"
+            stroke="#5b8cff"
+            stroke-width="3"/>
+
+        </svg>
+
+    </div>
+
+</div>
+
+
+<!-- HEALTH -->
+
+<div class="card">
+
+    <div class="card-header">
+        <span>HEALTH CHECK</span>
+        <span class="icon">✓</span>
+    </div>
+
+    <div class="value green">
+        PASS
+    </div>
+
+    <div class="sub">
+        Automated server validation
+    </div>
+
+    <div class="check">
+        Apache service
+        <span class="green">OK</span>
+    </div>
+
+    <div class="check">
+        Website response
+        <span class="green">OK</span>
+    </div>
+
+    <div class="check">
+        Linux server
+        <span class="green">OK</span>
+    </div>
+
+</div>
+
+
+<!-- PIPELINE -->
+
+<div class="card full" id="deployment">
+
+    <div class="card-header">
+
+        <span>
+            DEPLOYMENT PIPELINE
+        </span>
+
+        <span class="purple">
+            COMPLETED
+        </span>
+
+    </div>
+
+    <div class="pipeline">
+
+        <div class="stage">
+            <span class="green">✓</span>
+            <strong>GitHub</strong>
+            <small>Source Control</small>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="stage">
+            <span class="green">✓</span>
+            <strong>EC2</strong>
+            <small>Ubuntu Server</small>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="stage">
+            <span class="green">✓</span>
+            <strong>Apache</strong>
+            <small>Web Server</small>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="stage">
+            <span class="green">✓</span>
+            <strong>Website</strong>
+            <small>Live Deployment</small>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- AWS -->
+
+<div class="card wide" id="aws">
+
+    <div class="card-header">
+
+        <span>
+            AWS INFRASTRUCTURE
+        </span>
+
+        <span class="blue">
+            MUMBAI REGION
+        </span>
+
+    </div>
+
+    <div class="info-grid">
+
+        <div class="info">
+            <small>INSTANCE</small>
+            <strong>DevOps-Project1</strong>
+        </div>
+
+        <div class="info">
+            <small>OPERATING SYSTEM</small>
+            <strong>Ubuntu 26.04 LTS</strong>
+        </div>
+
+        <div class="info">
+            <small>PRIVATE IP</small>
+            <strong>10.0.1.47</strong>
+        </div>
+
+        <div class="info">
+            <small>STATUS</small>
+            <strong class="green">Running</strong>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TECHNOLOGIES -->
+
+<div class="card" id="technologies">
+
+    <div class="card-header">
+
+        <span>
+            TECHNOLOGIES
+        </span>
+
+        <span class="orange">
+            6
+        </span>
+
+    </div>
+
+    <div class="tech">
+
+        <div class="tech-box">
+            <strong>AWS</strong>
+            <small>Cloud</small>
+        </div>
+
+        <div class="tech-box">
+            <strong>Linux</strong>
+            <small>Operating System</small>
+        </div>
+
+        <div class="tech-box">
+            <strong>Apache</strong>
+            <small>Web Server</small>
+        </div>
+
+        <div class="tech-box">
+            <strong>Git</strong>
+            <small>Version Control</small>
+        </div>
+
+        <div class="tech-box">
+            <strong>GitHub</strong>
+            <small>Repository</small>
+        </div>
+
+        <div class="tech-box">
+            <strong>Bash</strong>
+            <small>Automation</small>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- WORKFLOW -->
+
+<div class="card full" id="workflow">
+
+    <div class="card-header">
+
+        <span>
+            PROJECT WORKFLOW
+        </span>
+
+        <span>
+            DEVOPS LIFECYCLE
+        </span>
+
+    </div>
+
+    <div class="tech">
+
+        <div class="tech-box">
+            <strong>01 • PLAN</strong>
+            <small>Define requirements</small>
+        </div>
+
+        <div class="tech-box">
+            <strong>02 • BUILD</strong>
+            <small>Create website & scripts</small>
+        </div>
+
+        <div class="tech-box">
+            <strong>03 • DEPLOY</strong>
+            <small>EC2 + Apache</small>
+        </div>
+
+        <div class="tech-box">
+            <strong>04 • MONITOR</strong>
+            <small>Health & logs</small>
+        </div>
+
+        <div class="tech-box">
+            <strong>05 • BACKUP</strong>
+            <small>Protect project data</small>
+        </div>
+
+        <div class="tech-box">
+            <strong>06 • VERSION</strong>
+            <small>GitHub repository</small>
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+DevOps Fundamentals Project • AWS EC2 • Ubuntu • Apache • GitHub
+
+</div>
+
+</div>
 
 </body>
 </html>
