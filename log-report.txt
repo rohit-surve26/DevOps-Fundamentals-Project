@@ -1,0 +1,58 @@
+=====================================
+Linux Log Monitoring Report
+===============================
+
+Generated on:
+Thu Aug 06 2026 ...
+
+Failed Login Attempts:
+No failed login attempts found.
+
+SSH Login Activity:
+
+Accepted publickey for ubuntu from ...
+Accepted publickey for ubuntu from ...
+Accepted publickey for ubuntu from ...
+...
+
+System Errors:
+
+Observed the following recurring errors in /var/log/syslog:
+
+1. Amazon SSM Agent failed to connect because no EC2 IAM Instance Role is attached.
+
+Example:
+ERROR EC2RoleProvider Failed to connect to Systems Manager with SSM role credentials.
+
+2. EC2 Metadata request failed.
+
+Example:
+EC2MetadataError: failed to make EC2Metadata request
+
+3. Firmware configuration file missing.
+
+Example:
+Error opening file /sys/power/mem_sleep: No such file or directory
+
+Analysis:
+
+These errors are expected because the EC2 instance was launched without an IAM Role configured for AWS Systems Manager (SSM). They do not affect SSH connectivity or Apache web hosting used in this project
+
+Warning Messages:
+
+1. Kernel warning:
+   - Keylock active warning reported by the kernel.
+
+2. Python deprecation warning:
+   - GLib.unix_signal_add is deprecated.
+
+3. Amazon SSM Agent warnings:
+   - Unable to watch the /etc/amazon/ssm directory.
+   - Failed to connect to Systems Manager because no EC2 IAM Instance Role is attached.
+
+4. Snapd warning:
+   - System booted with an old initrd without unlocked status reporting.
+
+Analysis:
+These warnings are expected on this EC2 instance and do not affect the web server or project functionality. The repeated Amazon SSM warnings occur because the EC2 instance was launched without an IAM role for AWS Systems Manager.
+.
